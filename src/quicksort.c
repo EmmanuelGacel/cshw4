@@ -19,6 +19,15 @@ static void quicksort_helper(void *array, int left, int right, size_t elem_sz,
  */
 static void swap(void *a, void *b, size_t size) {
     // TODO
+    a = (char *) a;
+    b = (char *) b;
+    char temp;
+    int index = 0;
+    while ((temp = *(a + i)) != 0 ){
+	    *(a + i) = *(b + i);
+	    *(b + i) = temp;
+	    index = index + size;
+    }
 }
 
 /**
@@ -30,6 +39,18 @@ static void swap(void *a, void *b, size_t size) {
 static int lomuto(void *array, int left, int right, size_t elem_sz,
                   int (*cmp) (const void*, const void*)) {
     // TODO
+    array = (char *) array;
+    char * pivot = array[elem_sz * left];
+    int current = left * elem_sz; // Is current a number or a pointer?
+    //char * current = *(array + (left * elem_sz));
+    for (char * i = current + elem_sz, index <= right * elem_sz, i = i + elem_sz){
+	    if (cmp(pivot, i) > 1){
+		    s = s + elem_sz;
+		    swap(array[s], array[i]);
+	    }
+    }
+    swap(array[left*elem_sz], array[s]);
+    return current;
 }
 
 /**
