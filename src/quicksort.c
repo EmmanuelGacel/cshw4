@@ -18,14 +18,17 @@ static void quicksort_helper(void *array, int left, int right, size_t elem_sz,
  * and this function will swap 4 bytes starting at a and b pointers.
  */
 static void swap(void *a, void *b, size_t size) {
-    // TODO
-    a = (char *) a;
-    b = (char *) b;
+    
+    char* a1 = (char *) a;
+    char* b1 = (char *) b;
+    
     char temp;
     int index = 0;
-    while ((temp = *(a + i)) != 0 ){
-	    *(a + i) = *(b + i);
-	    *(b + i) = temp;
+    
+    while (*(a1 + index) != '\0' ){
+	    temp = *(a1 + index);
+	    *(a1 + index) = *(b1 + index);
+	    *(b1 + index) = temp;
 	    index = index + size;
     }
 }
@@ -38,19 +41,24 @@ static void swap(void *a, void *b, size_t size) {
  */
 static int lomuto(void *array, int left, int right, size_t elem_sz,
                   int (*cmp) (const void*, const void*)) {
-    // TODO
-    array = (char *) array;
-    char * pivot = array[elem_sz * left];
-    int current = left * elem_sz; // Is current a number or a pointer?
-    //char * current = *(array + (left * elem_sz));
-    for (char * i = current + elem_sz, index <= right * elem_sz, i = i + elem_sz){
-	    if (cmp(pivot, i) > 1){
-		    s = s + elem_sz;
-		    swap(array[s], array[i]);
-	    }
-    }
-    swap(array[left*elem_sz], array[s]);
-    return current;
+
+	array = (char *) array; //casts array to a char*
+    	char * pivot = (char *) array + (elem_sz * right); //pointer to the rightmost element
+    
+	int index = left; //saves index of leftmost element
+    	
+	for (int i = left; i < right; i++){//iterates through all of the indexes
+        	
+		char * current = (char *) array + (elem_sz * i);//sets current to next unsorted element
+        	
+		if (cmp(current, pivot) < 0){ //compares current to pivot
+            		index++;
+			//need to convert to char * in order to do arithmetic
+			swap(current, (char *) array + (elem_sz * index), (right - left));//swaps if necessary
+        	}
+    	}
+   	swap((char *) array + (elem_sz * left), (char *) array + (elem_sz * index), (right - left)); 
+	return index;//returns the (now) index of the pivot pointer
 }
 
 /**
@@ -61,5 +69,9 @@ static int lomuto(void *array, int left, int right, size_t elem_sz,
  */
 static void quicksort_helper(void *array, int left, int right, size_t elem_sz,
                              int (*cmp) (const void*, const void*)) {
-    // TODO
+    if(left  < right){ //not the base case
+	int partition = lomuto(array, left, right, elem_sz, cmp); //index of the partition
+	quicksort_helper(array, left, partition - 1, elem_sz, cmp); //recursive call for left side
+	quicksort_helper(array, partition, right, elem_sz, cmp); //recursive call for right side
+	}
 }
