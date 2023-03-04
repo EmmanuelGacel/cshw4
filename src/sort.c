@@ -48,53 +48,49 @@ int main(int argc, char **argv) {
         }else if(total_flags == 1 && argc > 3){//Checks to see if too many files were specified
                 fprintf(stderr, "Error: Too many files specified.");
                 return EXIT_FAILURE;
-        }else if(total_flags == 0 && argc == 2){//Checks to see if a file was specifies
-                file_flag = 0;
+        }else if(total_flags == 0 && argc == 2){//Checks to see if a file was specified
+                file_flag = 1;
         }else if(total_flags == 1 && argc == 3){//Checks to see if a file was specified
-                file_flag = 0;
-        }else if(dflag == 1){//If
+                file_flag = 1;
+        }else if(iflag == 1){
+		bytes = sizeof(int);
+	}
+	else if(dflag == 1){//If
                 bytes = sizeof(double);
         }
         else{
-                bytes = sizeof(int);
+                bytes = sizeof(char);
         }
-        //int src_fd;
-        if(file_flag == 0 && dflag == 0){//Reads ints from stdin
-                int i = 0;
-                int num;
-                int buffer[1024];
-                while(scanf("%d", &num) != EOF){
-                        buffer[i] = num;
-                        i++;
-                }
+	//This section is responsible for reading from stdin
+	if(file_flag == 0){
+		if(iflag == 1){
+			int i = 0;
+			int num;
+                	int buffer[1024];
+                	while(scanf("%d", &num) != EOF){
+                        	buffer[i] = num;
+                        	i++;
+			}
+		}
+		if(dflag == 1){
+			int i = 0;
+                	double num;
+                	double buffer[1024];
+                	while(scanf("%lf`", &num) != EOF){
+                        	buffer[i] = num;
+                        	i = i + bytes;
+                	}
 
-        }
-        else if(file_flag == 0){//Reads doubles from stdin
-                int i = 0;
-                double num;
-                double buffer[1024];
-                while(scanf("%lf`", &num) != EOF){
-                        buffer[i] = num;
-                        i = i + bytes;
-                }
+		}else{
 
-        }else{
+		}
+	}else{
+		//This section is responsible for reading from a file
                 FILE * fp;
 		if ((fp = fopen(argv[argc], "r")) == NULL){
 			fprintf(stderr, "Error: Cannot open source file '%s'. %s.\n", argv[argc], strerror(errno));
                         return EXIT_FAILURE;
 		}
-		
-		/*
-		if((src_fd = open(argv[argc], O_RDONLY)) == -1){
-                        fprintf(stderr, "Error: Cannot open source file '%s'. %s.\n", argv[argc], strerror(errno));
-                        return EXIT_FAILURE;
-
-                }*/
-
-		else{
-
-                }
         }
 
 	/*
