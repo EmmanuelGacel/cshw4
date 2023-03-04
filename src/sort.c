@@ -58,13 +58,13 @@ int main(int argc, char **argv) {
         else{
                 bytes = sizeof(int);
         }
-        int src_fd;
+        //int src_fd;
         if(file_flag == 0 && dflag == 0){//Reads ints from stdin
                 int i = 0;
                 int num;
-                int buf[1024];
+                int buffer[1024];
                 while(scanf("%d", &num) != EOF){
-                        buf[i] = num;
+                        buffer[i] = num;
                         i++;
                 }
 
@@ -72,23 +72,32 @@ int main(int argc, char **argv) {
         else if(file_flag == 0){//Reads doubles from stdin
                 int i = 0;
                 double num;
-                double buf[1024];
+                double buffer[1024];
                 while(scanf("%lf`", &num) != EOF){
-                        buf[i] = num;
+                        buffer[i] = num;
                         i = i + bytes;
                 }
 
         }else{
-                if((src_fd = open(argv[argc], O_RDONLY)) == -1){
+                FILE * fp;
+		if ((fp = fopen(argv[argc], "r")) == NULL){
+			fprintf(stderr, "Error: Cannot open source file '%s'. %s.\n", argv[argc], strerror(errno));
+                        return EXIT_FAILURE;
+		}
+		
+		/*
+		if((src_fd = open(argv[argc], O_RDONLY)) == -1){
                         fprintf(stderr, "Error: Cannot open source file '%s'. %s.\n", argv[argc], strerror(errno));
                         return EXIT_FAILURE;
 
-                }else{
+                }*/
+
+		else{
 
                 }
         }
 
-	
+	/*
 	//SCANS INTEGERS FROM STDIN
 	if(argc < 3){
 		int i = 0;
@@ -102,5 +111,6 @@ int main(int argc, char **argv) {
 			printf("%d\n", buf[j]);
 		}
 	}
+	*/
     return EXIT_SUCCESS;
 }
