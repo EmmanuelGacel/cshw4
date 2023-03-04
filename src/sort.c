@@ -40,30 +40,33 @@ int main(int argc, char **argv) {
 	printf("iflag: %d\ndflag:  %d\n", iflag, dflag);
 	  int total_flags = iflag + dflag;
         if (total_flags == 2){//Checks to see if too many flags were specified
-                fprintf(stderr, "Error: Too many flags specified.");
+                fprintf(stderr, "Error: Too many flags specified.\n");
                 return EXIT_FAILURE;
         }else if(total_flags == 0 && argc > 2){//Checks to see if too many files were specified
-                fprintf(stderr, "Error: Too many files specified.");
+                fprintf(stderr, "Error: Too many files specified.\n");
                 return EXIT_FAILURE;
         }else if(total_flags == 1 && argc > 3){//Checks to see if too many files were specified
-                fprintf(stderr, "Error: Too many files specified.");
+                fprintf(stderr, "Error: Too many files specified.\n");
                 return EXIT_FAILURE;
         }else if(total_flags == 0 && argc == 2){//Checks to see if a file was specified
                 file_flag = 1;
         }else if(total_flags == 1 && argc == 3){//Checks to see if a file was specified
                 file_flag = 1;
-        }else if(iflag == 1){
+        }else if(iflag == 1){//Specifies that we are processing integers
 		bytes = sizeof(int);
 	}
-	else if(dflag == 1){//If
+	else if(dflag == 1){//Specifies that we are processing doubles
                 bytes = sizeof(double);
         }
-        else{
+        else{//Specifies that we are processing strings
                 bytes = sizeof(char);
         }
+	printf("File_flag: %d\n", file_flag);
+	printf("Sizeof bytes: %d\n", bytes);
 	//This section is responsible for reading from stdin
 	if(file_flag == 0){
-		if(iflag == 1){
+		if(iflag == 1){//Reads integers from stdin
+			printf("Made it to stdin integer processsor \n");
 			int i = 0;
 			int num;
                 	int buffer[1024];
@@ -71,23 +74,30 @@ int main(int argc, char **argv) {
                         	buffer[i] = num;
                         	i++;
 			}
-		}
-		if(dflag == 1){
+			 for(int j = 0; j< i; j++){
+				 printf("%d\n", buffer[j]);
+			 }
+
+		}else if(dflag == 1){//Reads doubles from stdin
+			printf("Made it to stdin doubles processsor \n");
+			/*
 			int i = 0;
                 	double num;
                 	double buffer[1024];
                 	while(scanf("%lf`", &num) != EOF){
                         	buffer[i] = num;
                         	i = i + bytes;
-                	}
-
-		}else{
-
+                	} for(int j = 0; j< i; j++){
+                        printf("%lf\n", buffer[j]);
+			*/
+                }else{//Reads strings from stdin
+			printf("Made it to stdin string processsor \n");
 		}
 	}else{
 		//This section is responsible for reading from a file
-                FILE * fp;
-		if ((fp = fopen(argv[argc], "r")) == NULL){
+                printf("Made it to stdin file processsor \n");
+		FILE * fp;
+		if ((fp = fopen(argv[argc], "r")) == NULL){//Attemps to open a file, if it can't the designated error message is printed.
 			fprintf(stderr, "Error: Cannot open source file '%s'. %s.\n", argv[argc], strerror(errno));
                         return EXIT_FAILURE;
 		}
