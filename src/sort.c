@@ -16,6 +16,48 @@ void display_usage(char arg){
 	fprintf(stderr, "Error: Unknown option '-%c' received.\nUsage: ./sort [-i|-d] [filename]\n   -i: Specifies the input contains ints.\n   -d: Specifies the input contains doubles.\n   filename: The file to sort. If no file is supplied, input is read from \n              stdin.\n   No flags defaults to sorting strings.\n",arg);
 }
 
+/**
+ * Takes as input a string and an in-out parameter value.
+ * If the string can be parsed, the integer value is assigned to the value
+ * parameter and true is returned.
+ * Otherwise, false is returned and the best attempt to modify the value
+ * parameter is made.
+ */
+int get_integer(char *input, int *value) {
+    long long long_long_i;
+    if (sscanf(input, "%lld", &long_long_i) != 1) {
+        fprintf(stderr, "Error: Cannot convert %s to integer.\n", input);
+        return 0;
+    }
+    *value = (int)long_long_i;
+    if (long_long_i != (long long)*value) {
+        fprintf(stderr, "Warning: Integer overflow with '%s'.\n", input);
+        return 0;
+    }
+    return 1;
+}
+/**
+ * Takes as input a string and an in-out parameter value.
+ * If the string can be parsed, the integer value is assigned to the value
+ * parameter and true is returned.
+ * Otherwise, false is returned and the best attempt to modify the value
+ * parameter is made.
+ */
+int get_double(char *input, int *value) {
+    long long long_long_i;
+    if (sscanf(input, "%lld", &long_long_i) != 1) {
+        fprintf(stderr, "Error: Cannot convert %s to integer.\n", input);
+        return 0;
+    }
+    *value = (double)long_long_i;
+    if (long_long_i != (long long)*value) {
+        fprintf(stderr, "Warning: Integer overflow with '%s'.\n", input);
+        return 0;
+    }
+    return 1;
+}
+
+
 int main(int argc, char **argv) {
 	int iflag = 0; 
 	int dflag = 0; //Sets all flags to false
@@ -96,12 +138,76 @@ int main(int argc, char **argv) {
 	}else{
 		//This section is responsible for reading from a file
                 printf("Made it to stdin file processsor \n");
+		char buffer[MAX_STRLEN];
 		FILE * fp;
-		if ((fp = fopen(argv[argc], "r")) == NULL){//Attemps to open a file, if it can't the designated error message is printed.
+		if ((fp = fopen(argv[argc-1], "r")) == NULL){//Attemps to open a file, if it can't the designated error message is printed.
 			fprintf(stderr, "Error: Cannot open source file '%s'. %s.\n", argv[argc], strerror(errno));
                         return EXIT_FAILURE;
 		}
-        }
+		int num_ints = 0;
+    		int intarray1[MAX_ELEMENTS];//Modified code
+    		double doublearray1[MAX_ELEMENTS];
+		/* Reads at most n-1 characters from infile until a newline is found. The
+       		characters up to and including the newline are stored in buf. The buffer
+       		is terminated with a '\0'. */
+    		while (fgets(buffer, MAX_STRLEN, fp)) {
+        		// Replace the '\n' with '\0'.
+        		char *eoln = strchr(buffer, '\n');
+        		if (eoln != NULL) {
+            			*eoln = '\0';
+       	 		}
+        		int val;
+			if(iflag == 1){
+        			if (get_integer(buffer, &val)) {
+                			printf("Ints going into the array: %d\n", val);
+                			intarray1[num_ints] = val;//Modified code
+                			num_ints++;
+            			}
+			}else if(dflag == 1){
+                                if (get_double(buffer, &val)) {
+                                        printf("Doubles going into the array: %d\n", val);
+                                        doublearray1[num_ints] = val;//Modified code
+                                        num_ints++;
+                                }
+                        }
+
+    		}
+		if(iflag == 1){
+			int intarray2[num_ints];
+			/*
+                 	* Loads ints from array1 into an array of the correct size
+                 	*/
+	                for (int i = 0; i < num_ints; i++){
+        	                intarray2[i] = intarray1[i];
+                	}
+			quicksort(&intarray2, num_ints, bytes, int_cmp);
+			for(int i = 0; i < num_ints; i++){
+                		printf("Ints comming out of the array: %d\n", intarray2[i]);
+		        }
+		}else if(dflag == 1){
+			double doublearray2[num_ints];
+			/*
+                 	* Loads ints from array1 into an array of the correct size
+                 	*/
+                	for (int i = 0; i < num_ints; i++){
+                	        doublearray2[i] = doublearray1[i];
+        	        }
+			quicksort(&doublearray2, num_ints, bytes, int_cmp);
+			for(int i = 0; i < num_ints; i++){
+                		printf("Doubles comming out of the array: %lf\n", doublearray2[i]);
+       			 }
+		}
+		
+		//int array2[num_ints];
+		/*
+    		 * Loads ints from array1 into an array of the correct size
+    		 */
+    		//for (int i = 0; i < num_ints; i++){
+            	//	array2[i] = array1[i];
+    		//}
+		//quicksort(&array2, num_ints, bytes, int_cmp);
+		
+	}
 
 	/*
 	//SCANS INTEGERS FROM STDIN
