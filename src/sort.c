@@ -116,31 +116,57 @@ int main(int argc, char **argv) {
                         	buffer[i] = num;
                         	i++;
 			}
+			//NEED TO QUICKSORT BUFFER
 			 for(int j = 0; j< i; j++){
 				 printf("%d\n", buffer[j]);
 			 }
 
 		}else if(dflag == 1){//Reads doubles from stdin
 			printf("Made it to stdin doubles processsor \n");
-			/*
 			int i = 0;
                 	double num;
                 	double buffer[1024];
-                	while(scanf("%lf`", &num) != EOF){
+
+                	while(scanf("%lf", &num) != EOF){
                         	buffer[i] = num;
-                        	i = i + bytes;
-                	} for(int j = 0; j< i; j++){
-                        printf("%lf\n", buffer[j]);
-			*/
+                        	i++;
+                	}
+			//NEED TO QUICKSORT BUFFER
+		       	for(int j = 0; j< i; j++){
+                        	printf("%lf\n", buffer[j]);
+			}
                 }else{//Reads strings from stdin
-			printf("Made it to stdin string processsor \n");
+		
+		printf("Made it to stdin string processsor \n");
+                int i = 0;
+                char *word;
+                char* buffer[1024];
+
+		word = malloc(sizeof(char) * 64); // allocate memory for word
+		while(scanf("%63[^\n]", word) !=  EOF){
+   			scanf("%*[^\n]"); // gets rid of the remaining line
+    			scanf("%*c"); // gets rid of the newline character
+    			buffer[i] = word;
+    			i++;
+   		 word = malloc(sizeof(char) * 64); //makes memory for the next word if needed
+		}
+
+		for(int j = 0; j< i; j++){
+    			printf("Coming out: %s\n", buffer[j]);
+		}
+
+		for (int j = 0; j < i; j++) { //frees all of the array elements
+    			free(buffer[j]);
+		}
+
+		free(word); //frees last block (which was malloced and not filled)
 		}
 	}else{
 		//This section is responsible for reading from a file
                 printf("Made it to stdin file processsor \n");
 		char buffer[MAX_STRLEN];
 		FILE * fp;
-		if ((fp = fopen(argv[argc-1], "r")) == NULL){//Attemps to open a file, if it can't the designated error message is printed.
+		if ((fp = fopen(argv[argc-1], "r")) == NULL){//Attemps to open a file
 			fprintf(stderr, "Error: Cannot open source file '%s'. %s.\n", argv[argc], strerror(errno));
                         return EXIT_FAILURE;
 		}
