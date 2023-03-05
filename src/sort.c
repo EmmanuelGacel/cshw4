@@ -113,7 +113,8 @@ int main(int argc, char **argv) {
                         	buffer[i] = num;
                         	i++;
 			}
-			quicksort(&buffer, i, bytes, int_cmp);
+			
+			quicksort(buffer, i, sizeof(int), int_cmp);
 			for(int j = 0; j< i; j++){
 				 printf("%d\n", buffer[j]);
 			}
@@ -130,7 +131,7 @@ int main(int argc, char **argv) {
                         	buffer[i] = num;
                         	i++;
                 	}
-			//quicksort(&buffer, i, bytes, dbl_cmp);
+			quicksort(buffer, i, sizeof(double), dbl_cmp);
 		       	for(int j = 0; j< i; j++){
                         	printf("%lf\n", buffer[j]);
 			}
@@ -152,7 +153,7 @@ int main(int argc, char **argv) {
    		 word = (char*) malloc(sizeof(char) * MAX_STRLEN + 1); //makes memory for the next word if needed
 		}
 		
-		//quicksort(&buffer, sizeof(char*), i, str_cmp);
+		quicksort(buffer,i, sizeof(char*), str_cmp);
 
 		for(int j = 0; j< i; j++){
     			printf("Coming out: %s\n", buffer[j]);
@@ -193,7 +194,7 @@ int main(int argc, char **argv) {
     		}
 		}
 
-		//quicksort(&intarray, num_ints, sizeof(int), int_cmp);
+		quicksort(intarray, num_ints, sizeof(int), int_cmp);
 		
 		for(int i = 0; i < num_ints; i++){
                 	printf("Ints comming out of the array: %d\n", intarray[i]);
@@ -219,7 +220,7 @@ int main(int argc, char **argv) {
                                 num_ints++;
                         }
 			}
-			//quicksort(&dblarray, num_ints, sizeof(double), dbl_cmp);
+			quicksort(dblarray, num_ints, sizeof(double), dbl_cmp);
 			for(int i = 0; i < num_ints; i++){
                 		printf("Doubles comming out of the array: %lf\n", dblarray[i]);
 		        }
@@ -244,7 +245,7 @@ int main(int argc, char **argv) {
 	                        	num_words++;
                         	}
 			}
-			//quicksort(&strarray, num_words, sizeof(char*), str_cmp);
+			quicksort(strarray, num_words, sizeof(char*), str_cmp);
                         for(int i = 0; i < num_words; i++){
                                 printf("Strings comming out of the array: %s\n", strarray[i]);
                         }
