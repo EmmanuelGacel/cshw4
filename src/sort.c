@@ -180,28 +180,28 @@ int main(int argc, char **argv) {
 			int num_ints = 0;
 			int *intarray = (int*) malloc(MAX_ELEMENTS * sizeof(int));
 
-		while (fgets(buffer, MAX_STRLEN, fp)){
-    			char *eoln = strchr(buffer, '\n');
-		        if (eoln != NULL) {
-        		*eoln = '\0';
-    			}
+			while (fgets(buffer, MAX_STRLEN, fp)){
+    				char *eoln = strchr(buffer, '\n');
+		        	if (eoln != NULL) {
+        				*eoln = '\0';
+    				}
 
-   		int int_val;
-    		if (get_integer(buffer, &int_val)) {
-        		printf("Ints going into the array: %d\n", int_val);
-        		intarray[num_ints] = int_val;
-        		num_ints++;
-    		}
-		}
+   				int int_val;
+    				if (get_integer(buffer, &int_val)) {
+        				printf("Ints going into the array: %d\n", int_val);
+        				intarray[num_ints] = int_val;
+        				num_ints++;
+    				}
+			}
 
-		quicksort(intarray, num_ints, sizeof(int), int_cmp);
+			quicksort(intarray, num_ints, sizeof(int), int_cmp);
 		
-		for(int i = 0; i < num_ints; i++){
-                	printf("Ints comming out of the array: %d\n", intarray[i]);
-		}
+			for(int i = 0; i < num_ints; i++){
+                		printf("Ints comming out of the array: %d\n", intarray[i]);
+			}
 
-		free(intarray); //frees the int array
-		fclose(fp);
+			free(intarray); //frees the int array
+			fclose(fp);
 		}
 		else if(dflag == 1){ //doubles from file
 			int num_ints = 0;
