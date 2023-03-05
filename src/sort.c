@@ -108,12 +108,12 @@ int main(int argc, char **argv) {
 			int num;
 			
 			int *buffer = (int*) malloc(MAX_ELEMENTS * sizeof(int));
-
+			//CHECK FOR INVALID OR OVERFLOW HERE
                 	while(scanf("%d", &num) != EOF && i < MAX_ELEMENTS){
                         	buffer[i] = num;
                         	i++;
 			}
-			//quicksort(&buffer, i, bytes, int_cmp);
+			quicksort(&buffer, i, bytes, int_cmp);
 			for(int j = 0; j< i; j++){
 				 printf("%d\n", buffer[j]);
 			}
@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
                 	
 			double *buffer = (double*) malloc(MAX_ELEMENTS * sizeof(double));
 
-                	while(scanf("%lf", &num) != EOF){
+                	while(scanf("%lf", &num) != EOF && i < MAX_ELEMENTS){
                         	buffer[i] = num;
                         	i++;
                 	}
@@ -200,7 +200,7 @@ int main(int argc, char **argv) {
 		}
 
 		free(intarray); //frees the int array
-
+		fclose(fp);
 		}
 		else if(dflag == 1){ //doubles from file
 			int num_ints = 0;
@@ -224,20 +224,21 @@ int main(int argc, char **argv) {
                 		printf("Doubles comming out of the array: %lf\n", dblarray[i]);
 		        }
 			free(dblarray);
+			fclose(fp);
 		}
 		else{ //strings from file
 			int num_words = 0;
                         
 			char **strarray = (char**) malloc(MAX_ELEMENTS * sizeof(char*));
-
+			
                         while (fgets(buffer, MAX_STRLEN, fp)){
                                 char *eoln = strchr(buffer, '\n');
                                 if (eoln != NULL) {
                                 *eoln = '\0';
                                 }
 
-				char* word = malloc(sizeof(char) * MAX_STRLEN);
-                        	if(sscanf(buffer, "%s", &*word) != 1){
+				char* word = malloc(sizeof(char) * MAX_STRLEN + 1);
+                        	if(sscanf(buffer, "%s", word) != EOF){
                                 	printf("String going into array: %s\n", word);
 					strarray[num_words] = word;
 	                        	num_words++;
@@ -252,92 +253,8 @@ int main(int argc, char **argv) {
     				free(strarray[i]);
 			}
 			free(strarray);
+			fclose(fp);
 		}
-	/**
-		int num_ints = 0;
-    		int intarray1[MAX_ELEMENTS];//Modified code
-    		double doublearray1[MAX_ELEMENTS];
-		//char *stringarray1[MAX_ELEMENTS};
-		// Reads at most n-1 characters from infile until a newline is found. The
-       		//characters up to and including the newline are stored in buf. The buffer
-       		//is terminated with a '\0'. 
-    		while (fgets(buffer, MAX_STRLEN, fp)) { //PUTS INTO BUFFER FROM FILE
-        		// Replace the '\n' with '\0'.
-        		char *eoln = strchr(buffer, '\n');
-        		if (eoln != NULL) {
-            			*eoln = '\0';
-       	 		}
-
-        		int int_val;
-			double d_val;
-
-			if(iflag == 1){ //int
-        			if (get_integer(buffer, &int_val)) {
-                			printf("Ints going into the array: %d\n", int_val);
-                			intarray1[num_ints] = int_val;//Modified code
-                			num_ints++;
-            			}
-			}else if(dflag == 1){ //double
-                                if (get_double(buffer, &d_val)) {
-                                        printf("Doubles going into the array: %lf\n", d_val);
-                                        doublearray1[num_ints] = d_val;//Modified code
-                                        num_ints++;
-                             	 }
-			else{ //string
-			      
-			      	char* word = malloc(sizeof(char) * 64);
-				if(sscanf(buffer, "%lf", value) != 1){
-					printf("String going into array: %s\n", word);
-
-				}
-				stringarray[num_ints] = word;
-				num_ints++;
-				free(word);
-				
-				}	
-                        }
-
-    		} //QUICKSORTS AND PRINTS OUT OF BUFFER
-		if(iflag == 1){ //int
-			int intarray2[num_ints];
-			
-                 	* //Loads ints from array1 into an array of the correct size
-                 	
-	                for (int i = 0; i < num_ints; i++){
-        	                intarray2[i] = intarray1[i];
-                	}
-			quicksort(&intarray2, num_ints, bytes, int_cmp);
-			for(int i = 0; i < num_ints; i++){
-                		printf("Ints comming out of the array: %d\n", intarray2[i]);
-		        }
-		}else if(dflag == 1){ //double
-			double doublearray2[num_ints];
-			
-                 	// Loads ints from array1 into an array of the correct size
-                 	
-                	for (int i = 0; i < num_ints; i++){
-                	        doublearray2[i] = doublearray1[i];
-        	        }
-			quicksort(&doublearray2, num_ints, bytes, int_cmp);
-			for(int i = 0; i < num_ints; i++){
-                		printf("Doubles comming out of the array: %lf\n", doublearray2[i]);
-       			 }
-		}else{ //string
-		      
-			char* stringarray2[num_ints]; //correctly sized array
-
-			for(int i = 0; i < num_ints; i++){
-				stringarray2[i] = stringarray1[i];
-			}
-
-			quicksort(&stringarray2, num_ints, sizeof(char*), str_cmp);
-			for(int i = 0; i < num_ints; i++){
-                                printf("Doubles comming out of the array: %s\n", stringarray2[i]);
-                         }
-			
-		}
-		*/		
 	}
-
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
