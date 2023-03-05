@@ -97,6 +97,7 @@ int str_cmp(const void *a, const void *b){
 }
 
 void quicksort(void *array, size_t len, size_t elem_sz, int (*cmp) (const void*, const void*)){
+	printf("reached quicksort\n");
 	quicksort_helper(array, 0, (len * elem_sz) - 1, elem_sz, cmp);
 
 }
