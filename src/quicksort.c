@@ -8,7 +8,7 @@ static int lomuto(void *array, int left, int right, size_t elem_sz,
                   int (*cmp) (const void*, const void*));
 static void quicksort_helper(void *array, int left, int right, size_t elem_sz,
                              int (*cmp) (const void*, const void*));
-
+//working version
 /**
  * Swaps the values in two pointers.
  *
