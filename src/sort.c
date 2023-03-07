@@ -152,8 +152,10 @@ int main(int argc, char **argv) {
     			i++;
    		 word = (char*) malloc(sizeof(char) * MAX_STRLEN + 1); //makes memory for the next word if needed
 		}
-		
-		quicksort(buffer,i, sizeof(char*), str_cmp);
+		for(int j = 0; j< i; j++){
+    			printf("Going in: %s\n", buffer[j]);
+		}	
+		quicksort(buffer,i, sizeof(char), str_cmp);
 
 		for(int j = 0; j< i; j++){
     			printf("Coming out: %s\n", buffer[j]);
@@ -245,7 +247,7 @@ int main(int argc, char **argv) {
 	                        	num_words++;
                         	}
 			}
-			quicksort(strarray, num_words, sizeof(char*), str_cmp);
+			quicksort(strarray, num_words, sizeof(char), str_cmp);
                         for(int i = 0; i < num_words; i++){
                                 printf("Strings comming out of the array: %s\n", strarray[i]);
                         }
