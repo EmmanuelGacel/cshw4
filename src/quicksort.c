@@ -19,17 +19,17 @@ static void quicksort_helper(void *array, int left, int right, size_t elem_sz,
  */
 static void swap(void *a, void *b, size_t size) {
     
-    char* a1 = (char *) a;
-    char* b1 = (char *) b;
+   char * a1 = (char*) a;
+   char * b1 = (char*) b; 
     
-    char temp;
-    
+   char temp;
+
     for(int i = 0; i < size; i++){
-    	temp = a1[i];
-	a1[i] = b1[i];
-	b1[i] = temp;
+        temp = a1[i];
+        a1[i] = b1[i];
+        b1[i] = temp;
     }
- 
+
 }
 
 /**
@@ -40,27 +40,7 @@ static void swap(void *a, void *b, size_t size) {
  */
 static int lomuto(void *array, int left, int right, size_t elem_sz,
                   int (*cmp) (const void*, const void*)) {
-	
-	if(elem_sz == 1){
-	char ** test = array;
-    	char * pivot = (char *) test[left]; //pointer to the leftmost element
-    
-	int index = left; //saves index of leftmost element
-	for (int i = left+1; i <= right; i++){//iterates through all of the indexes
-		char * current = test[i];//sets current to next unsorted element
-        	
-		if (cmp(current, pivot) < 0){ //compares current to pivot
-            		index++;
-			//need to convert to char * in order to do arithmetic
-			swap(test[index],current,elem_sz);//swaps if necessary
-        	}
-    	}
-	swap(pivot, test[index], elem_sz);
-
-	return index;//returns the (now) index of the pivot pointer
-	}
-	else{
-		char * pivot = (char *) array + (elem_sz * left); //pointer to the leftmost element
+	char * pivot = (char *) array + (elem_sz * left); //pointer to the leftmost element
 
 	int index = left; //saves index of leftmost element
 	for (int i = left+1; i <= right; i++){//iterates through all of the indexes
@@ -75,7 +55,7 @@ static int lomuto(void *array, int left, int right, size_t elem_sz,
 	swap(pivot, (char *) array + (elem_sz * index), elem_sz);
 
 	return index;//returns the (now) index of the pivot pointer
-	}
+
 }
 
 /**
@@ -87,21 +67,10 @@ static int lomuto(void *array, int left, int right, size_t elem_sz,
 static void quicksort_helper(void *array, int left, int right, size_t elem_sz,
         		int (*cmp) (const void*, const void*)) {
 	if(left < right){
-		if(elem_sz == 0){
-		char ** arr = array;
-		int partition = lomuto(arr, left, right, elem_sz, cmp); //index of the partition
-        	quicksort_helper(arr, left, partition - 1, elem_sz, cmp); //recursive call for left side
-        	quicksort_helper(arr, partition + 1, right, elem_sz, cmp); //recursive call for right side
-	}
-	else{
 		int partition = lomuto(array, left, right, elem_sz, cmp); //index of the partition
 		quicksort_helper(array, left, partition - 1, elem_sz, cmp); //recursive call for left side
 		quicksort_helper(array, partition + 1, right, elem_sz, cmp); //recursive call for right side
 	}
-	}
-    /*
-     * Should the second quicksort call be: quicksort_helper(array, partition, right, elem_sz, cmp);
-     */
 }
 
 int int_cmp(const void *a, const void *b){
@@ -118,17 +87,9 @@ int dbl_cmp(const void *a, const void *b){
 }
 
 int str_cmp(const void *a, const void *b){
-	printf("String 1: %s String 2: %s\n", (const char *) a, (const char*) b);
-	return strcmp((const char *) a, (const char *) b);
+	return strcmp(*((const char**) a), *((const char **) b));
 }
 
 void quicksort(void *array, size_t len, size_t elem_sz, int (*cmp) (const void*, const void*)){
-
-	if(elem_sz == 1){
-	char **arr = array;
-	quicksort_helper(arr, 0, (len - 1), elem_sz, cmp);
-	}
-	else{
 	quicksort_helper(array, 0, (len - 1), elem_sz, cmp);
-	}
 }

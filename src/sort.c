@@ -58,10 +58,8 @@ int main(int argc, char **argv) {
 	int dflag = 0; //Sets all flags to false
 	int c;
 	int file_flag = 0;
-	int bytes = 0;
 	opterr = 0; //Supresses errors
 	while ((c = getopt(argc, argv, ":id")) != -1){//Checks the flags inputed by the user
-		printf("c: %c\n", c);
 		switch(c) {
 			case 'i':
 				iflag = 1;
@@ -74,7 +72,6 @@ int main(int argc, char **argv) {
 				return EXIT_FAILURE;
 		}
 	}
-	printf("iflag: %d\ndflag:  %d\n", iflag, dflag);
 	int total_flags = iflag + dflag;
         if (total_flags == 2){//Checks to see if too many flags were specified
                 fprintf(stderr, "Error: Too many flags specified.\n");
@@ -89,21 +86,10 @@ int main(int argc, char **argv) {
                 file_flag = 1;
         }else if(total_flags == 1 && argc == 3){//Checks to see if a file was specified
                 file_flag = 1;
-        }else if(iflag == 1){//Specifies that we are processing integers
-		bytes = sizeof(int);
 	}
-	else if(dflag == 1){//Specifies that we are processing doubles
-                bytes = sizeof(double);
-        }
-        else{//Specifies that we are processing strings
-                bytes = sizeof(char);
-        }
-	printf("File_flag: %d\n", file_flag);
-	printf("Sizeof bytes: %d\n", bytes);
 	//This section is responsible for reading from stdin
 	if(file_flag == 0){
 		if(iflag == 1){//Reads integers from stdin
-			printf("Made it to stdin integer processsor \n");
 			int i = 0;
 			int num;
 			
@@ -121,7 +107,6 @@ int main(int argc, char **argv) {
 			free(buffer);
 
 		}else if(dflag == 1){//Reads doubles from stdin
-			printf("Made it to stdin doubles processsor \n");
 			int i = 0;
                 	double num;
                 	
@@ -139,7 +124,6 @@ int main(int argc, char **argv) {
 
                 }else{//Reads strings from stdin
 		
-		printf("Made it to stdin string processsor \n");
                 int i = 0;
                 char** buffer = (char**) malloc(MAX_ELEMENTS * sizeof(char)); //malloc + free this
 		
@@ -152,13 +136,10 @@ int main(int argc, char **argv) {
     			i++;
    		 word = (char*) malloc(sizeof(char) * MAX_STRLEN + 1); //makes memory for the next word if needed
 		}
-		for(int j = 0; j< i; j++){
-    			printf("Going in: %s\n", buffer[j]);
-		}	
-		quicksort(buffer,i, sizeof(char), str_cmp);
+		quicksort(buffer,i, sizeof(char*), str_cmp);
 
 		for(int j = 0; j< i; j++){
-    			printf("Coming out: %s\n", buffer[j]);
+    			printf("%s\n", buffer[j]);
 		}
 
 		for (int j = 0; j < i; j++) { //frees all of the array elements
@@ -170,7 +151,6 @@ int main(int argc, char **argv) {
 		}
 	}else{
 		//FILE READING
-                printf("Made it to stdin file processsor \n");
 		char buffer[MAX_STRLEN + 1];
 		FILE * fp;
 		if ((fp = fopen(argv[argc-1], "r")) == NULL){//Attemps to open a file
@@ -190,7 +170,6 @@ int main(int argc, char **argv) {
 
    				int int_val;
     				if (get_integer(buffer, &int_val)) {
-        				printf("Ints going into the array: %d\n", int_val);
         				intarray[num_ints] = int_val;
         				num_ints++;
     				}
@@ -199,7 +178,7 @@ int main(int argc, char **argv) {
 			quicksort(intarray, num_ints, sizeof(int), int_cmp);
 		
 			for(int i = 0; i < num_ints; i++){
-                		printf("Ints comming out of the array: %d\n", intarray[i]);
+                		printf("%d\n", intarray[i]);
 			}
 
 			free(intarray); //frees the int array
@@ -217,14 +196,13 @@ int main(int argc, char **argv) {
 
                         double dbl_val;
 			if (get_double(buffer, &dbl_val)) {
-                        	printf("Doubles going into the array: %lf\n", dbl_val);
                                 dblarray[num_ints] = dbl_val;//Modified code
                                 num_ints++;
                         }
 			}
 			quicksort(dblarray, num_ints, sizeof(double), dbl_cmp);
 			for(int i = 0; i < num_ints; i++){
-                		printf("Doubles comming out of the array: %lf\n", dblarray[i]);
+                		printf("%lf\n", dblarray[i]);
 		        }
 			free(dblarray);
 			fclose(fp);
@@ -242,14 +220,13 @@ int main(int argc, char **argv) {
 
 				char* word = malloc(sizeof(char) * MAX_STRLEN + 1);
                         	if(sscanf(buffer, "%s", word) != EOF){
-                                	printf("String going into array: %s\n", word);
 					strarray[num_words] = word;
 	                        	num_words++;
                         	}
 			}
-			quicksort(strarray, num_words, sizeof(char), str_cmp);
+			quicksort(strarray, num_words, sizeof(char*), str_cmp);
                         for(int i = 0; i < num_words; i++){
-                                printf("Strings comming out of the array: %s\n", strarray[i]);
+                                printf("%s\n", strarray[i]);
                         }
 
 			for (int i = 0; i < num_words; i++) {
