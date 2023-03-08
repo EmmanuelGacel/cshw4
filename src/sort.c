@@ -15,7 +15,7 @@ void display_usage(char arg){
 	
 	fprintf(stderr, "Error: Unknown option '-%c' received.\nUsage: ./sort [-i|-d] [filename]\n   -i: Specifies the input contains ints.\n   -d: Specifies the input contains doubles.\n   filename: The file to sort. If no file is supplied, input is read from \n              stdin.\n   No flags defaults to sorting strings.\n",arg);
 }
-//working version
+
 /**
  * Takes as input a string and an in-out parameter value.
  * If the string can be parsed, the integer value is assigned to the value
