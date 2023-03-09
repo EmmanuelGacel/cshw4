@@ -13,7 +13,7 @@
  */
 void display_usage(char arg){
 	
-	fprintf(stderr, "Error: Unknown option '-%c' received.\nUsage: ./sort [-i|-d] [filename]\n   -i: Specifies the input contains ints.\n   -d: Specifies the input contains doubles.\n   filename: The file to sort. If no file is supplied, input is read from \n              stdin.\n   No flags defaults to sorting strings.\n",arg);
+	fprintf(stderr, "Error: Unknown option '-%c' received.\nUsage: ./sort [-i|-d] [filename]\n   -i: Specifies the input contains ints.\n   -d: Specifies the input contains doubles.\n   filename: The file to sort. If no file is supplied, input is read from \n             stdin.\n   No flags defaults to sorting strings.\n",arg);
 }
 
 /**
@@ -26,7 +26,7 @@ void display_usage(char arg){
 int get_integer(char *input, int *value) {
     long long long_long_i;
     if (sscanf(input, "%lld", &long_long_i) != 1) {
-        fprintf(stderr, "Error: Cannot convert %s to integer.\n", input);
+        fprintf(stderr, "Error: Cannot convert '%s' to integer.\n", input);
         return 0;
     }
     *value = (int)long_long_i;
@@ -45,7 +45,7 @@ int get_integer(char *input, int *value) {
  */
 int get_double(char *input, double *value) {
     if (sscanf(input, "%lf", value) != 1) {
-        fprintf(stderr, "Error: Cannot convert %s to double.\n", input);
+        fprintf(stderr, "Error: Cannot convert '%s' to double.\n", input);
         return 0;
     }
     //decimals do not overflow, just a loss in precision
@@ -94,6 +94,11 @@ int main(int argc, char **argv) {
 			int num;
 			
 			int *buffer = (int*) malloc(MAX_ELEMENTS * sizeof(int));
+			if (buffer == NULL) {
+	                        fprintf(stderr, "Error: malloc failed\n");
+        	                exit(EXIT_FAILURE);
+                	}
+
 			//CHECK FOR INVALID OR OVERFLOW HERE
                 	while(scanf("%d", &num) != EOF && i < MAX_ELEMENTS){
                         	buffer[i] = num;
@@ -111,6 +116,10 @@ int main(int argc, char **argv) {
                 	double num;
                 	
 			double *buffer = (double*) malloc(MAX_ELEMENTS * sizeof(double));
+			if (buffer == NULL) {
+	                        fprintf(stderr, "Error: malloc failed\n");
+        	                exit(EXIT_FAILURE);
+               		 }
 
                 	while(scanf("%lf", &num) != EOF && i < MAX_ELEMENTS){
                         	buffer[i] = num;
@@ -126,15 +135,26 @@ int main(int argc, char **argv) {
 		
                 int i = 0;
                 char** buffer = (char**) malloc(MAX_ELEMENTS * sizeof(char)); //malloc + free this
-		
+		if (buffer == NULL) {
+        		fprintf(stderr, "Error: malloc failed\n");
+        		exit(EXIT_FAILURE);
+    		}
 		//USE MACRO AND ADD 1
 		char *word = (char*) malloc(sizeof(char) * MAX_STRLEN + 1); // allocate memory for word
+		if (word == NULL) {
+        		fprintf(stderr, "Error: malloc failed\n");
+        		exit(EXIT_FAILURE);
+    		}	
 		while(scanf("%63[^\n]", word) !=  EOF){
    			scanf("%*[^\n]"); // gets rid of the remaining line
     			scanf("%*c"); // gets rid of the newline character
     			buffer[i] = word;
     			i++;
    		 word = (char*) malloc(sizeof(char) * MAX_STRLEN + 1); //makes memory for the next word if needed
+		if (word == NULL) {
+                        fprintf(stderr, "Error: malloc failed\n");
+                        exit(EXIT_FAILURE);
+                }
 		}
 		quicksort(buffer,i, sizeof(char*), str_cmp);
 
@@ -154,13 +174,18 @@ int main(int argc, char **argv) {
 		char buffer[MAX_STRLEN + 1];
 		FILE * fp;
 		if ((fp = fopen(argv[argc-1], "r")) == NULL){//Attemps to open a file
-			fprintf(stderr, "Error: Cannot open source file '%s'. %s.\n", argv[argc], strerror(errno));
+			fprintf(stderr, "Error: Cannot open '%s'. No such file or directory.\n", argv[argc-1]);
                         return EXIT_FAILURE;
 		}
 		
 		if(iflag == 1){ // ints from file
 			int num_ints = 0;
 			int *intarray = (int*) malloc(MAX_ELEMENTS * sizeof(int));
+
+			if (intarray  == NULL) {
+	                        fprintf(stderr, "Error: malloc failed\n");
+        	                exit(EXIT_FAILURE);
+                	}
 
 			while (fgets(buffer, MAX_STRLEN, fp)){
     				char *eoln = strchr(buffer, '\n');
@@ -187,6 +212,11 @@ int main(int argc, char **argv) {
 		else if(dflag == 1){ //doubles from file
 			int num_ints = 0;
                         double *dblarray = (double*) malloc (MAX_ELEMENTS * sizeof(double));
+			
+			if (dblarray == NULL) {
+                	        fprintf(stderr, "Error: malloc failed\n");
+        	                exit(EXIT_FAILURE);
+	                }
 
                          while (fgets(buffer, MAX_STRLEN, fp)){
                                 char *eoln = strchr(buffer, '\n');
@@ -211,7 +241,11 @@ int main(int argc, char **argv) {
 			int num_words = 0;
                         
 			char **strarray = (char**) malloc(MAX_ELEMENTS * sizeof(char*));
-			
+			if (strarray == NULL) {
+	                        fprintf(stderr, "Error: malloc failed\n");
+        	                exit(EXIT_FAILURE);
+                	}
+
                         while (fgets(buffer, MAX_STRLEN, fp)){
                                 char *eoln = strchr(buffer, '\n');
                                 if (eoln != NULL) {
@@ -219,7 +253,12 @@ int main(int argc, char **argv) {
                                 }
 
 				char* word = malloc(sizeof(char) * MAX_STRLEN + 1);
-                        	if(sscanf(buffer, "%s", word) != EOF){
+                        	if (word == NULL) {
+		                        fprintf(stderr, "Error: malloc failed\n");
+                		        exit(EXIT_FAILURE);
+                		}
+
+				if(sscanf(buffer, "%s", word) != EOF){
 					strarray[num_words] = word;
 	                        	num_words++;
                         	}
