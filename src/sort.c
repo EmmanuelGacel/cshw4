@@ -5,8 +5,14 @@
 #include <string.h>
 #include "quicksort.h"
 
+/*
+ * HW4 Team 25, March 10, 2022
+ */
+
+
 #define MAX_STRLEN     64 // Not including '\0'
 #define MAX_ELEMENTS 1024
+
 /*
  * Prints the usage statement to stderr.
  * - 'arg' contains the invalid flag

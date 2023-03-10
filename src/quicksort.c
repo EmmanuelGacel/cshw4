@@ -2,6 +2,10 @@
 #include <string.h>
 #include "quicksort.h"
 
+/*
+ * HW4 Team 25, March 10, 2022
+ */
+
 /* Static (private to this file) function prototypes. */
 static void swap(void *a, void *b, size_t size);
 static int lomuto(void *array, int left, int right, size_t elem_sz,
